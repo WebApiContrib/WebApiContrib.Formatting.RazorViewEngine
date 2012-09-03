@@ -20,16 +20,12 @@
 }
 
 @section contentMenu {
-                                <li>                <a href="#Quick_overview">Quick overview</a>
-                            <ol><li>                <a href="#Finding_a_Package">Finding a Package</a>
-                            </li><li>                <a href="#Package_Sources">Package Sources</a>
-                            </li><li>                <a href="#Installing_a_Package">Installing a Package</a>
-                            </li><li>                <a href="#Removing_a_Package">Removing a Package</a>
-                            </li><li>                <a href="#Updating_a_Package">Updating a Package</a>
-                            </li></ol></li><li>                <a href="#Managing_Packages_for_the_Solution">Managing Packages for the Solution</a>
-                            <ol><li>                <a href="#Installing_Online_Packages">Installing Online Packages</a>
-                            </li><li>                <a href="#Managing_Installed_Packages">Managing Installed Packages</a>
-                            </li><li>                <a href="#Updating_Packages">Updating Packages</a>
+                                <li>                <a href="#Quick_overview">Quick overview</a></li>
+                                <li>                <a href="#Install_packages">Install Packages</a></li>
+                                <li> <a href="#How_the_View_locator_works">How the View locator works</a>
+                            <ol><li>                <a href="#Using_convention">Using convention</a>
+                            </li><li>                <a href="#Using_configuration">Using annotation</a>
+                            </li><li>                <a href="#Using_convention">Using configuration</a>
                             </li></ol></li>
 }
 
@@ -80,3 +76,62 @@ Customer.cshtml located in the "~/Views" folder of the web project
 </pre>
 
 <h3 id="Install_packages">2 Install packages</h3>
+<p>To be updated....</p>
+
+<h3 id="How_the_View_locator_works">3 How the View locator works</h3>
+<p>
+    The razor view locator (RazorViewLocator) vill try to locate a view by using either, convention, annotation, configuration or by returning a View.
+    The views must be located in the follwoing folders:<pre>
+<code>
+    ~\Views
+    ~\Views\Shared
+</code></pre>
+<p>
+    The "~" is the root folder of the web application. Both .cshtml and .vbhtml are supported.
+</p>
+<p>
+    <i>Note: There is no way to specify another paths at this moment, it's easy to implement a view locator. It's done by implementing the IViewLocator interface located in the WebApiContrib.Formatting.Html assembly.</i>
+</p>
+
+<h3 id="Using_convention">3.1 Using convention</h3>
+<p>
+    By default the RazorViewLocator will locate a view by convention, it will try to find a view by the name of the model returned by the ApiController's methods.
+    The following code will try to find a view with the name "Customer" in the "Views" or "Views\Shared" folder and use it to render the returnd Customer model:
+    <pre class="C#"><code>
+    public class CustomerController : ApiController
+    {
+        public Customer Get()
+        {
+            return new Customer { Name = "John Doe", Country = "Country" };
+        }
+    }
+</code></pre>
+    To use the ApiController to render the Customer model with the Customer view, just use the following path in browser:</p>
+    <p>
+    <a href="/Customer">http://localhost/mysite/customer</a>
+    </p> 
+
+<h3 id="Using_annotation">3.2 Using annotation</h3>
+<p>
+    A view could be specified for a specific mode by adding the ViewAttribute to the model returned by a ApiController method.
+</p>
+    <pre class="c#"><code>
+    public class CustomerController : ApiController
+    {
+        public Customer Get()
+        {
+            return new Customer { Name = "John Doe", Country = "Country" };
+        }
+    }
+        
+    [View("CustomerViaAttrib")]
+    public class Customer
+    {
+        public string Name { get; set; }
+
+        public string Country { get; set; }
+    }
+</code></pre>
+    <p>
+    This code will try to locate a view with the name "CustomerViaAttrib".
+    </p>
