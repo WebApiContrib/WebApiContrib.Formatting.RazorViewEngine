@@ -1,10 +1,68 @@
 ﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-</head>
-<body>
-    @RenderBody()
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>ASP.Net Web API - Razor</title>
+        <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        <link href="/Content/Site.css" rel="stylesheet" />
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">ASP.Net Web API - Razor</p>
+                </div>
+                <div class="float-right">
+                    <nav>
+                        <ul id="menu">
+                            <li>Home</li>
+                            <li>About</li>
+                            <li>Contact</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+
+            <section class="featured">
+                @RenderSection("featured")
+            </section>
+        
+            <section class="content-wrapper main-content clear-fix">
+                
+                 <aside id="toc">
+                    <div id="toc-main">
+                        <h3 id="toc-heading">Content</h3>
+                        <ol id="toc-body">
+                            @RenderSection("contentMenu")
+                        </ol>
+                    </div>
+                </aside>
+
+                @RenderBody()
+
+            </section>
+
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - .Net Guides</p>
+                </div>
+                <div class="float-right">
+                    <ul id="social">
+                        <li><a href="http://facebook.com" class="facebook">Facebook</a></li>
+                        <li><a href="http://twitter.com" class="twitter">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+        <link rel="stylesheet" href="http://yandex.st/highlightjs/7.0/styles/default.min.css">
+        <script src="http://yandex.st/highlightjs/7.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        
+    </body>
 </html>

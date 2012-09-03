@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using WebApiContrib.Formatting.Html;
 
 namespace MvcWebApiSiteTest.Controllers
 {

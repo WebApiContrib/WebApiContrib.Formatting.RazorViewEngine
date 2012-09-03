@@ -1,62 +1,137 @@
-﻿
-<!DOCTYPE html>
-<html>
+﻿@{
+	_Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="WebApiContrib : Community Contributions for ASP.NET Web API" />
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+         
+            <div>
+               <hgroup class="title">
+                <h2>ASP.Net Web API using HtmlMediaTypeFormater and RazorEngine</h2>
+            </hgroup>
+            <p>
+                By using the HtmlMediaTypeViewFormatter and the Razor view parser, it's now possible to use ASP.Net Web API to render a model as HTML by using Razor.
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/Content/Site.css">
+                This site will demonstrate the use of the formatter and the Razor parser.
+            </p>
+        </div>
+    </section>
+}
 
-    <title>WebApiContrib</title>
-  </head>
+@section contentMenu {
+                                <li>                <a href="#Quick_overview">Quick overview</a></li>
+                                <li>                <a href="#Install_packages">Install Packages</a></li>
+                                <li> <a href="#How_the_View_locator_works">How the View locator works</a>
+                            <ol><li>                <a href="#Using_convention">Using convention</a>
+                            </li><li>                <a href="#Using_configuration">Using annotation</a>
+                            </li><li>                <a href="#Using_convention">Using configuration</a>
+                            </li></ol></li>
+}
 
-  <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/WebApiContrib/WebAPIContrib">Fork Me on GitHub</a>
+<h3 id="Quick_overview">1 Quick overview</h3>
 
-          <h1 id="project_title">WebApiContrib</h1>
-          <h2 id="project_tagline">Community Contributions for ASP.NET Web API</h2>
+<p>Before we dive into the details, here is a simple example of using the HtmlMediaTypeViewFormatter with Razor:</p>
+<pre class="cs">
+    <code>
+    public class CustomerController : ApiController
+    {
+        public Customer Get()
+        {
+            return new Customer { Name = "John Doe", Country = "Country" };
+        }
+    }
+</code>
+</pre>
+<p>
+This controller will simply return a Customer as JSON or XAML based on the "Accept" or "content-type" header.
+</p>
+<p>
+    By adding the HtmlMediaTypeViewFormatter to the global.asax and using the RazorViewLocator and a RazorViewParser the code can also render the model as HTML by using a View. By deafult the view tried to be located
+    is "Customer.cshtml" or "Customer.vbhtml", based on the name of the model returned.
+</p>
+<pre class="cs">
+    <code>
+    protected void Application_Start()
+    {
+        //...
 
-          <section id="downloads">
-            <a class="zip_download_link" href="https://github.com/WebApiContrib/WebAPIContrib/zipball/master">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="https://github.com/WebApiContrib/WebAPIContrib/tarball/master">Download this project as a tar.gz file</a>
-          </section>
-        </header>
-    </div>
+        GlobalConfiguration.Configuration.Formatters.Add(new HtmlMediaTypeViewFormatter());
+        
+        GlobalViews.DefaultViewParser = new RazorViewParser();
+        GlobalViews.DefaultViewLocator = new RazorViewLocator();
+        
+        //...
+    }
+</code>
+</pre>
+<p>
+Customer.cshtml located in the "~/Views" folder of the web project
+</p>
+<pre class="html">
+    <code>
+    &lt;html&gt;Hello &#64;Model.Name! Welcome to Razor!&lt;/html&gt;
+</code>
+</pre>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>WebApiContrib</h3>
+<h3 id="Install_packages">2 Install packages</h3>
+<p>To be updated....</p>
 
-<p>WebApiContrib is a collection of projects and samples built by the community for to enhance and improve the <a href="http://www.asp.net/web-api">ASP.NET Web API framework.</a></p>
+<h3 id="How_the_View_locator_works">3 How the View locator works</h3>
+<p>
+    The razor view locator (RazorViewLocator) vill try to locate a view by using either, convention, annotation, configuration or by returning a View.
+    The views must be located in the follwoing folders:<pre>
+<code>
+    ~\Views
+    ~\Views\Shared
+</code></pre>
+<p>
+    The "~" is the root folder of the web application. Both .cshtml and .vbhtml are supported.
+</p>
+<p>
+    <i>Note: There is no way to specify another paths at this moment, it's easy to implement a view locator. It's done by implementing the IViewLocator interface located in the WebApiContrib.Formatting.Html assembly.</i>
+</p>
 
-<p>More information will be coming very soon!</p>
-      </section>
-    </div>
+<h3 id="Using_convention">3.1 Using convention</h3>
+<p>
+    By default the RazorViewLocator will locate a view by convention, it will try to find a view by the name of the model returned by the ApiController's methods.
+    The following code will try to find a view with the name "Customer" in the "Views" or "Views\Shared" folder and use it to render the returnd Customer model:
+    <pre class="C#"><code>
+    public class CustomerController : ApiController
+    {
+        public Customer Get()
+        {
+            return new Customer { Name = "John Doe", Country = "Country" };
+        }
+    }
+</code></pre>
+    To use the ApiController to render the Customer model with the Customer view, just use the following path in browser:</p>
+    <p>
+    <a href="/Customer">http://localhost/mysite/customer</a>
+    </p> 
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">WebApiContrib maintained by <a href="https://github.com/WebApiContrib">WebApiContrib</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+<h3 id="Using_annotation">3.2 Using annotation</h3>
+<p>
+    A view could be specified for a specific mode by adding the ViewAttribute to the model returned by a ApiController method.
+</p>
+    <pre class="c#"><code>
+    public class CustomerController : ApiController
+    {
+        public Customer Get()
+        {
+            return new Customer { Name = "John Doe", Country = "Country" };
+        }
+    }
+        
+    [View("CustomerViaAttrib")]
+    public class Customer
+    {
+        public string Name { get; set; }
 
-	<script type="text/javascript">
-	    var _gaq = _gaq || [];
-	    _gaq.push(['_setAccount', 'UA-30452127-1']);
-	    _gaq.push(['_trackPageview']);
-	    (function () {
-	        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	    })();
-	</script>
-  </body>
-</html>
+        public string Country { get; set; }
+    }
+</code></pre>
+    <p>
+    This code will try to locate a view with the name "CustomerViaAttrib".
+    </p>
