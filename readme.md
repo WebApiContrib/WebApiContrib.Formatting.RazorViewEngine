@@ -1,6 +1,1 @@
-WebAPIContrib
-=============
-
-Community Contributions for ASP.NET Web API
-
-http://webapicontrib.github.com/
+MOVED HERE - https://github.com/WebApiContrib/WebApiContrib.Formatting.Razor
