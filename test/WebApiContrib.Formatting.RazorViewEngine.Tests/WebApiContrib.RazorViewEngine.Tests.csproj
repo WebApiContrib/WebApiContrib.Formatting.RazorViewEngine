@@ -82,6 +82,8 @@
     <EmbeddedResource Include="Views\Test1.cshtml" />
     <EmbeddedResource Include="Views\Test2.cshtml" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Views\NullModelTest.cshtml" />
+    <EmbeddedResource Include="Views\IteratorTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\WebApiContrib.Formatting.Razor\WebApiContrib.Formatting.Razor.csproj">
